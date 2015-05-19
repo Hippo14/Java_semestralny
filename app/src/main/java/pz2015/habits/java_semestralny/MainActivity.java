@@ -10,22 +10,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import java.util.Timer;
+
 
 public class MainActivity extends ActionBarActivity {
 
     private static final int NUM_ROWS = 10;
     private static final int NUM_COLS = 10;
 
-    Button buttons[][] = new Button[NUM_ROWS][NUM_COLS];
+    myButton myButtons[][] = new myButton[NUM_ROWS][NUM_COLS];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        populateButtons();
+        populatemyButtons();
     }
 
-    private void populateButtons() {
+    private void populatemyButtons() {
         TableLayout table = (TableLayout) findViewById(R.id.tableForButtons);
         for (int row = 0; row < NUM_ROWS; row++) {
             TableRow tableRow = new TableRow(this);
@@ -41,50 +43,112 @@ public class MainActivity extends ActionBarActivity {
                 final int FINAL_COL = col;
                 final int FINAL_ROW = row;
                 
-                Button button = new Button(this);
-                //set button layout
-                button.setLayoutParams(new TableRow.LayoutParams(
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        1.0f
-                ));
-                //button setText
-                button.setText("" + row + "," + col);
+                myButton myButton = new myButton(this);
+
+                //myButton setText
+                myButton.setText("" + row + "," + col);
                 //padding text
-                button.setPadding(0, 0, 0 ,0);
-                //button setBackground
-                button.setBackgroundDrawable(getResources().getDrawable(R.drawable.greenbutton));
-                //button onclick listener
-                button.setOnClickListener(new View.OnClickListener() {
+                myButton.setPadding(0, 0, 0 ,0);
+                //myButton setBackground
+                myButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.greenbutton));
+                //myButton onclick listener
+                myButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        gridButtonClicked(FINAL_COL, FINAL_ROW);
+                        gridmyButtonClicked(FINAL_COL, FINAL_ROW);
+                        //WIN
+                        if (checkAllButtons()) {
+
+                        }
                     }
                 });
-                tableRow.addView(button);
-                buttons[row][col] = button;
+                tableRow.addView(myButton);
+                myButtons[row][col] = myButton;
             }
         }
     }
 
-    private void gridButtonClicked(int col, int row) {
-        Toast.makeText(this, "Button clicked: " + col + "," + row, Toast.LENGTH_SHORT).show();
+    private void gridmyButtonClicked(int col, int row) {
+        Toast.makeText(this, "myButton clicked: " + col + "," + row, Toast.LENGTH_SHORT).show();
 
-        if (row > 0 && col > 0) {
-            Button button0 = buttons[row - 1][col];
-            Button button1 = buttons[row + 1][col];
-            Button button2 = buttons[row][col - 1];
-            Button button3 = buttons[row][col + 1];
-            //button setBackground
-            button0.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
-            button1.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
-            button2.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
-            button3.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
+        myButton button = myButtons[row][col];
+        button.checkColor();
+
+        if (col == 0 && row == 0) {
+            myButton myButton0 = myButtons[row + 1][col];
+            myButton myButton1 = myButtons[row][col + 1];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
         }
+        else if (col == NUM_COLS - 1 && row == 0) {
+            myButton myButton0 = myButtons[row + 1][col];
+            myButton myButton1 = myButtons[row][col - 1];
 
+            myButton0.checkColor();
+            myButton1.checkColor();
+        }
+        else if (col == 0 && row == NUM_ROWS - 1) {
+            myButton myButton0 = myButtons[row - 1][col];
+            myButton myButton1 = myButtons[row][col + 1];
 
+            myButton0.checkColor();
+            myButton1.checkColor();
+        }
+        else  if (col == NUM_COLS - 1 && row == NUM_ROWS - 1) {
+            myButton myButton0 = myButtons[row - 1][col];
+            myButton myButton1 = myButtons[row][col - 1];
 
-        //v.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
+            myButton0.checkColor();
+            myButton1.checkColor();
+        }
+        else if (col == 0 && row > 0) {
+            myButton myButton0 = myButtons[row - 1][col];
+            myButton myButton1 = myButtons[row][col + 1];
+            myButton myButton2 = myButtons[row + 1][col];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
+            myButton2.checkColor();
+        }
+        else if (col > 0 && row == 0) {
+            myButton myButton0 = myButtons[row][col - 1];
+            myButton myButton1 = myButtons[row + 1][col];
+            myButton myButton2 = myButtons[row][col + 1];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
+            myButton2.checkColor();
+        }
+        else if (col == NUM_COLS - 1 && row > 0) {
+            myButton myButton0 = myButtons[row - 1][col];
+            myButton myButton1 = myButtons[row][col - 1];
+            myButton myButton2 = myButtons[row + 1][col];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
+            myButton2.checkColor();
+        }
+        else if (col > 0 && row == NUM_ROWS - 1) {
+            myButton myButton0 = myButtons[row][col - 1];
+            myButton myButton1 = myButtons[row - 1][col];
+            myButton myButton2 = myButtons[row][col + 1];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
+            myButton2.checkColor();
+        }
+        else {
+            myButton myButton0 = myButtons[row - 1][col];
+            myButton myButton1 = myButtons[row + 1][col];
+            myButton myButton2 = myButtons[row][col - 1];
+            myButton myButton3 = myButtons[row][col + 1];
+
+            myButton0.checkColor();
+            myButton1.checkColor();
+            myButton2.checkColor();
+            myButton3.checkColor();
+        }
 
     }
 
@@ -99,7 +163,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up myButton, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -110,4 +174,15 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public boolean checkAllButtons() {
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                if (myButtons[row][col].getWhichColorIs() == false)
+                    return false;
+            }
+        }
+        return true;
+    }
+
 }
